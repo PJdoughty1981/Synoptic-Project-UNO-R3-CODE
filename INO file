@@ -1,0 +1,192 @@
+// LED pins for water level indicator
+const int greenLED = 7; // High level
+const int yellowLED = 8; // Mid level
+const int redLED = 9; // Low level
+
+// LED pins for water quality indicator
+const int qualityGreenLED = 2; // Good quality
+const int qualityYellowLED1 = 3; // Ok level 3
+const int qualityYellowLED2 = 4; // Ok level 2
+const int qualityYellowLED3 = 5; // Ok level 1
+const int qualityRedLED = 6; // Not ok
+
+// Sensor inputs (analog pins)
+const int Water_Level_Sensor = A0;
+const int Water_Quality_Sensor = A4;
+const int System_Voltage_Sensor = A2;
+// USB power control pin
+const int usbPowerControlPin1 = A5; // Control for USB port 1
+// Scope here to add sensors or further functions
+
+// LED pins for battery level indicator
+const int batteryGreenLED = 11; // Fully charged
+const int batteryYellowLED = 12; // OK charge
+const int batteryRedLED = 13; // Low charge
+
+// Variables to manage button state
+int lastButtonState = LOW; // the previous state of the button
+int currentButtonState; // the current state of the button
+unsigned long lastDebounceTime = 0; // the last time the button state was toggled
+
+// Variables for debounce of button
+unsigned long debounceDelay = 50;
+
+// Button pin
+const int buttonPin = 10; // The pin where the button is connected
+
+// Define a variable to track the last time the button was pressed
+unsigned long lastButtonPressTime = 0;
+
+void setup() {
+  // Initialize all the LED pins as outputs
+  pinMode(greenLED, OUTPUT);
+  pinMode(yellowLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+  pinMode(qualityGreenLED, OUTPUT);
+  pinMode(qualityYellowLED1, OUTPUT);
+  pinMode(qualityYellowLED2, OUTPUT);
+  pinMode(qualityYellowLED3, OUTPUT);
+  pinMode(qualityRedLED, OUTPUT);
+  pinMode(batteryGreenLED, OUTPUT);
+  pinMode(batteryYellowLED, OUTPUT);
+  pinMode(batteryRedLED, OUTPUT);
+  pinMode(usbPowerControlPin1, OUTPUT);
+  
+  // Initialize the button pin as an input with pullup resistor
+  pinMode(buttonPin, INPUT_PULLUP);
+
+  // Start serial communication 
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Handle button press with debounce
+  int reading = digitalRead(buttonPin);
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading != currentButtonState) {
+      currentButtonState = reading;
+      if (currentButtonState == HIGH) {
+        lastButtonPressTime = millis(); // Update the last button press time
+        runSensorLoop();
+        runSystemVoltageLoop();
+        runWaterQualityLoop();
+      }
+    }
+  }
+  lastButtonState = reading;
+
+  // Turn off all LEDs after they have been on for 4 seconds
+  if (millis() - lastButtonPressTime >= 4000) {
+    turnOffAllLeds();
+  }
+}
+
+void runSensorLoop() {
+  // Read the value from the water level sensor (potentiometer)
+  int waterLevelValue = analogRead(Water_Level_Sensor);
+  int waterLevelPercentage = map(waterLevelValue, 0, 1023, 0, 100);
+
+  // Determine the water level and light the appropriate LED
+  if (waterLevelPercentage >= 100) {
+    // High water level
+    digitalWrite(greenLED, HIGH);
+    Serial.println("Tank Water Level = HIGH");
+  } else if (waterLevelPercentage >= 50) {
+    // Mid water level
+    digitalWrite(yellowLED, HIGH);
+    Serial.println("Tank Water Level = MEDIUM");
+  } else if (waterLevelPercentage >= 20) {
+    // Low water level
+    digitalWrite(redLED, HIGH);
+    Serial.println("Tank Water Level = LOW");
+  } else {
+    // Very low water level 
+    digitalWrite(redLED, HIGH); 
+    Serial.println("Tank Water Level = VERY LOW");
+  }
+}
+
+void runSystemVoltageLoop() {
+  // Read the value from the system voltage sensor
+  int systemVoltageValue = analogRead(System_Voltage_Sensor);
+
+  // Map the reading to a voltage (10.5 - 12.7V):
+  float simulatedVoltage = map(systemVoltageValue, 0, 1023, 105, 127) / 10.0;
+
+  // Check the simulated voltage and light the appropriate LED
+  if (simulatedVoltage >= 12.0) {
+    // Battery is in good condition (>= 12.0V)
+    digitalWrite(batteryGreenLED, HIGH);
+    digitalWrite(batteryYellowLED, LOW);
+    digitalWrite(batteryRedLED, LOW);
+    Serial.print("Simulated Battery Voltage: ");
+    Serial.print(simulatedVoltage);
+    Serial.println("V - Good Condition");
+  } else if (simulatedVoltage > 10.5) {
+    // Battery is in medium condition (> 10.5V and < 12.0V)
+    digitalWrite(batteryYellowLED, HIGH);
+    digitalWrite(batteryGreenLED, LOW);
+    digitalWrite(batteryRedLED, LOW);
+    Serial.print("Simulated Battery Voltage: ");
+    Serial.print(simulatedVoltage);
+    Serial.println("V - Medium Condition");
+  } else {
+    // Battery is in poor condition (<= 10.5V)
+    digitalWrite(batteryRedLED, HIGH);
+    digitalWrite(batteryGreenLED, LOW);
+    digitalWrite(batteryYellowLED, LOW);
+    Serial.print("Simulated Battery Voltage: ");
+    Serial.print(simulatedVoltage);
+    Serial.println("V - Poor Condition");
+  }
+}
+
+void runWaterQualityLoop() {
+  int sensorValue = analogRead(Water_Quality_Sensor);
+
+  // Define the thresholds for the water quality ranges
+  int thresholds[5] = {204, 409, 614, 819, 1023};
+
+  // Light up the corresponding LEDs based on water quality
+  if (sensorValue < thresholds[0]) {
+    digitalWrite(qualityRedLED, HIGH);
+    Serial.println("Water Quality: Bad");
+  } else if (sensorValue < thresholds[1]) {
+    digitalWrite(qualityYellowLED3, HIGH);
+    digitalWrite(qualityRedLED, HIGH);
+    Serial.println("Water Quality: Poor");
+  } else if (sensorValue < thresholds[2]) {
+    digitalWrite(qualityYellowLED2, HIGH);
+    digitalWrite(qualityYellowLED3, HIGH);
+    digitalWrite(qualityRedLED, HIGH);
+    Serial.println("Water Quality: Fair");
+  } else if (sensorValue < thresholds[3]) {
+    digitalWrite(qualityYellowLED1, HIGH);
+    digitalWrite(qualityYellowLED2, HIGH);
+    digitalWrite(qualityYellowLED3, HIGH);
+    Serial.println("Water Quality: Good");
+  } else {
+    digitalWrite(qualityGreenLED, HIGH);
+    digitalWrite(qualityYellowLED1, HIGH);
+    digitalWrite(qualityYellowLED2, HIGH);
+    digitalWrite(qualityYellowLED3, HIGH);
+    Serial.println("Water Quality: Excellent");
+  }
+}
+
+void turnOffAllLeds() {
+  digitalWrite(greenLED, LOW);
+  digitalWrite(yellowLED, LOW);
+  digitalWrite(redLED, LOW);
+  digitalWrite(qualityGreenLED, LOW);
+  digitalWrite(qualityYellowLED1, LOW);
+  digitalWrite(qualityYellowLED2, LOW);
+  digitalWrite(qualityYellowLED3, LOW);
+  digitalWrite(qualityRedLED, LOW);
+  digitalWrite(batteryGreenLED, LOW);
+  digitalWrite(batteryYellowLED, LOW);
+  digitalWrite(batteryRedLED, LOW);
+}
