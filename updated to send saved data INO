@@ -17,6 +17,7 @@ const int Water_Quality_Sensor = A4;
 const int System_Voltage_Sensor = A2;
 // USB power control pin
 const int usbPowerControlPin1 = A5; // Control for USB port 1
+bool usbPowerEnabled = true; // State to keep track of USB power
 // Scope here to add sensors or further functions for 2 more analouge outs
 
 // LED pins for battery level indicator
@@ -148,8 +149,8 @@ void runSystemVoltageLoop() {
   float simulatedVoltage = map(systemVoltageValue, 0, 1023, 105, 127) / 10.0;
 
   // Check the simulated voltage and light the appropriate LED
-  if (simulatedVoltage >= 12.0) {
-    // Battery is in good condition (>= 12.0V)
+  if (simulatedVoltage >= 11.5) {
+    // Battery is in good condition (>= 11.5V)
     digitalWrite(batteryGreenLED, HIGH);
     digitalWrite(batteryYellowLED, LOW);
     digitalWrite(batteryRedLED, LOW);
@@ -157,7 +158,7 @@ void runSystemVoltageLoop() {
     Serial.print(simulatedVoltage);
     Serial.println("V - Good Condition");
   } else if (simulatedVoltage > 10.5) {
-    // Battery is in medium condition (> 10.5V and < 12.0V)
+    // Battery is in medium condition (> 10.5V and < 11.4V)
     digitalWrite(batteryYellowLED, HIGH);
     digitalWrite(batteryGreenLED, LOW);
     digitalWrite(batteryRedLED, LOW);
@@ -172,6 +173,18 @@ void runSystemVoltageLoop() {
     Serial.print("Simulated Battery Voltage: ");
     Serial.print(simulatedVoltage);
     Serial.println("V - Poor Condition");
+  }
+  // If the voltage is poor or less than or equal to 10.4V, turn off the USB power
+  if (simulatedVoltage <= 10.4 && usbPowerEnabled) {
+    digitalWrite(usbPowerControlPin1, LOW); // Turn off USB power
+    Serial.println("USB POWER OFF");
+    usbPowerEnabled = false; // Update the state
+  }
+  // If the voltage is back to 11.4V or higher, turn the USB power back on
+  else if (simulatedVoltage >= 11.4 && !usbPowerEnabled) {
+    digitalWrite(usbPowerControlPin1, HIGH); // Turn on USB power
+    Serial.println("USB POWER ON");
+    usbPowerEnabled = true; // Update the state
   }
   // Log system voltage to EEPROM
   if (shouldLogData) {
