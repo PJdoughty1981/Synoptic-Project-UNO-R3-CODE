@@ -1,0 +1,30 @@
+import serial
+import time
+from datetime import datetime
+
+# Set up the serial connection
+ser = serial.Serial('COM3', 9600, timeout=1)
+time.sleep(2)  # Wait for the connection to establish
+
+data_received = False
+eeprom_data = []
+
+# While waiting for the END_OF_EEPROM_DATA just keep saving the data being sent.
+while True:
+    if ser.in_waiting:
+        line = ser.readline()
+        if line.strip() == b"END_OF_EEPROM_DATA":
+            data_received = True
+        else:
+            eeprom_data.append(line)
+
+    if data_received:
+        desktop_path = os.path.join(os.path.join(os.environ['USERPROFILE']), 'Desktop')
+        file_name = f"{datetime.now().strftime('%Y-%m-%d')}_EEPROM_data_WATERQUALTIY.txt"
+        file_path = os.path.join(desktop_path, file_name)
+        with open(file_path, "wb") as file:
+            for data in eeprom_data:
+                file.write(data)
+        break
+
+ser.close()
