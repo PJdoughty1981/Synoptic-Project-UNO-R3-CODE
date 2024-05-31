@@ -85,13 +85,18 @@ void loop() {
       currentButtonState = reading;
       if (currentButtonState == HIGH) {
         lastButtonPressTime = millis(); // Update the last button press time
-        runSensorLoop();
-        runSystemVoltageLoop();
-        runWaterQualityLoop();
+        bool shouldLogData = true;
+        if (shouldLogData) {
+          runSensorLoop();
+          runSystemVoltageLoop();
+          runWaterQualityLoop();
+          }
+        }
       }
     }
   }
   lastButtonState = reading;
+  bool shouldLogData = false;
 
   // Turn off all LEDs after they have been on for 4 seconds
   if (millis() - lastButtonPressTime >= 4000) {
@@ -183,32 +188,38 @@ void runWaterQualityLoop() {
 
   // Light up the corresponding LEDs based on water quality
   if (sensorValue < thresholds[0]) {
+    qualityLevelNum = 0; // Bad
     digitalWrite(qualityRedLED, HIGH);
     Serial.println("Water Quality: Bad");
   } else if (sensorValue < thresholds[1]) {
+    qualityLevelNum = 1; // poor
     digitalWrite(qualityYellowLED3, HIGH);
     digitalWrite(qualityRedLED, HIGH);
     Serial.println("Water Quality: Poor");
   } else if (sensorValue < thresholds[2]) {
+    qualityLevelNum = 2; // Fair
     digitalWrite(qualityYellowLED2, HIGH);
     digitalWrite(qualityYellowLED3, HIGH);
     digitalWrite(qualityRedLED, HIGH);
     Serial.println("Water Quality: Fair");
   } else if (sensorValue < thresholds[3]) {
+    qualityLevelNum = 3; // Good
     digitalWrite(qualityYellowLED1, HIGH);
     digitalWrite(qualityYellowLED2, HIGH);
     digitalWrite(qualityYellowLED3, HIGH);
     Serial.println("Water Quality: Good");
   } else {
+    qualityLevelNum = 4; // Excellent
     digitalWrite(qualityGreenLED, HIGH);
     digitalWrite(qualityYellowLED1, HIGH);
     digitalWrite(qualityYellowLED2, HIGH);
     digitalWrite(qualityYellowLED3, HIGH);
     Serial.println("Water Quality: Excellent");
   }
+  // Log the numerical representation of water quality to EEPROM
   if (shouldLogData) {
-    EEPROM.put(eepromAddress, sensorValue );
-    eepromAddress += sizeof(sensorValue);
+    EEPROM.put(eepromAddress, qualityLevelNum);
+    eepromAddress += sizeof(qualityLevelNum);
   }
 }
 
