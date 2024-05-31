@@ -160,28 +160,32 @@ void runSystemVoltageLoop() {
   // Check the simulated voltage and light the appropriate LED
   if (simulatedVoltage >= 11.4) {
     // Battery is in good condition (>= 12.0V)
+    digitalWrite(usbPowerControlPin1, HIGH); // Turn on USB power
     digitalWrite(batteryGreenLED, HIGH);
     digitalWrite(batteryYellowLED, LOW);
     digitalWrite(batteryRedLED, LOW);
-    Serial.print("Simulated Battery Voltage: ");
+    Serial.print("Battery Voltage: ");
     Serial.print(simulatedVoltage);
     Serial.println("V - Good Condition");
+    Serial.println("USB POWER ON");
   } else if (simulatedVoltage > 10.5) {
     // Battery is in medium condition (> 10.5V and < 12.0V)
     digitalWrite(batteryYellowLED, HIGH);
     digitalWrite(batteryGreenLED, LOW);
     digitalWrite(batteryRedLED, LOW);
-    Serial.print("Simulated Battery Voltage: ");
+    Serial.print("Battery Voltage: ");
     Serial.print(simulatedVoltage);
     Serial.println("V - Medium Condition");
   } else {
     // Battery is in poor condition (<= 10.5V)
+    digitalWrite(usbPowerControlPin1, LOW); // Turn off USB power
     digitalWrite(batteryRedLED, HIGH);
     digitalWrite(batteryGreenLED, LOW);
     digitalWrite(batteryYellowLED, LOW);
-    Serial.print("Simulated Battery Voltage: ");
+    Serial.print("Battery Voltage: ");
     Serial.print(simulatedVoltage);
     Serial.println("V - Poor Condition");
+    Serial.println("USB POWER OFF");
   }
   // Record the system voltage value to EEPROM
   EEPROMWriteInt(systemVoltageAddress, systemVoltageValue);
