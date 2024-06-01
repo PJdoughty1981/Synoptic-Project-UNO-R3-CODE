@@ -1,0 +1,301 @@
+#include <EEPROM.h>
+
+// LED pins for water level indicator
+const int greenLED = 7; // High level
+const int yellowLED = 8; // Mid level
+const int redLED = 9; // Low level
+
+// LED pins for water quality indicator
+const int qualityGreenLED = 2; // Good quality
+const int qualityYellowLED1 = 3; // Ok level 3
+const int qualityYellowLED2 = 4; // Ok level 2
+const int qualityYellowLED3 = 5; // Ok level 1
+const int qualityRedLED = 6; // Not ok
+
+// Sensor inputs (analog pins)
+const int Water_Level_Sensor = A0;
+const int Water_Quality_Sensor = A4;
+const int System_Voltage_Sensor = A2;
+
+// USB power control pin
+const int usbPowerControlPin1 = A5; // Control for USB port 1
+
+// LED pins for battery level indicator
+const int batteryGreenLED = 11; // Fully charged
+const int batteryYellowLED = 12; // OK charge
+const int batteryRedLED = 13; // Low charge
+
+// Button pin
+const int buttonPin = 10; // The pin where the button is connected
+
+// Variables to manage button state
+int lastButtonState = LOW; // the previous state of the button
+int currentButtonState; // the current state of the button
+unsigned long lastDebounceTime = 0; // the last time the button state was toggled
+unsigned long debounceDelay = 50; // Variables for debounce of button
+unsigned long lastButtonPressTime = 0; // Define a variable to track the last time the button was pressed
+
+// EEPROM addresses for storing sensor values
+const int eepromStartAddress = 0;
+int currentEEPROMIndex = 0;// current EEPROM index
+const int maxEntries = 5000; // Maximum number of entries in EEPROM
+const int entrySize = 6; // Size of each entry (2 bytes per value, 3 values per entry)
+const int bufferSize = maxEntries * entrySize; // Total size needed for the buffer
+
+void setup() {
+  // Initialize all the LED pins as outputs
+  pinMode(greenLED, OUTPUT);
+  pinMode(yellowLED, OUTPUT);
+  pinMode(redLED, OUTPUT);
+  pinMode(qualityGreenLED, OUTPUT);
+  pinMode(qualityYellowLED1, OUTPUT);
+  pinMode(qualityYellowLED2, OUTPUT);
+  pinMode(qualityYellowLED3, OUTPUT);
+  pinMode(qualityRedLED, OUTPUT);
+  pinMode(batteryGreenLED, OUTPUT);
+  pinMode(batteryYellowLED, OUTPUT);
+  pinMode(batteryRedLED, OUTPUT);
+  pinMode(usbPowerControlPin1, OUTPUT);
+  
+  // Initialize the button pin as an input with pullup resistor
+  pinMode(buttonPin, INPUT_PULLUP);
+
+  // Start serial communication 
+  Serial.begin(9600);
+}
+
+void loop() {
+  // Handle button press with debounce
+  int reading = digitalRead(buttonPin);
+  if (reading != lastButtonState) {
+    lastDebounceTime = millis();
+  }
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading != currentButtonState) {
+      currentButtonState = reading;
+      if (currentButtonState == HIGH) {
+        lastButtonPressTime = millis(); // Update the last button press time
+        runWaterLevelLoop();
+        runSystemVoltageLoop();
+        runWaterQualityLoop();
+        // Write data to EEPROM every time the button is pressed
+        int waterLevel, systemVoltage, waterQuality;
+        // Get the current sensor values
+        waterLevel = analogRead(Water_Level_Sensor);
+        systemVoltage = analogRead(System_Voltage_Sensor);
+        waterQuality = analogRead(Water_Quality_Sensor);
+        // Write the current sensor values to the next free EEPROM address
+        writeEntry(currentEEPROMIndex, waterLevel, systemVoltage, waterQuality);
+        // Increment the index for the next write operation
+        currentEEPROMIndex++;
+        // Ensure the index wraps around when reaching the max number of entries
+        if (currentEEPROMIndex >= maxEntries) {
+          currentEEPROMIndex = 0;
+        }
+      }
+    }
+  }
+  lastButtonState = reading;
+
+  // Check if button is held down for 10 seconds
+  if (currentButtonState == LOW && millis() - lastButtonPressTime >= 10000) {
+    sendEEPROMData(); // Send the recorded values from EEPROM through serial
+    clearEEPROM(); // Clear the EEPROM after sending data
+    lastButtonPressTime = millis(); // Reset lastButtonPressTime to avoid repeated transmissions
+  }
+
+  // Turn off all LEDs after they have been on for 4 seconds
+  if (millis() - lastButtonPressTime >= 4000) {
+    turnOffAllLeds();
+  }
+}
+
+void runWaterLevelLoop() {
+  // Read the value from the water level sensor (potentiometer)
+  int waterLevelValue = analogRead(Water_Level_Sensor);
+  int waterLevelPercentage = map(waterLevelValue, 0, 1023, 0, 100);
+
+  // Determine the water level and light the appropriate LED
+  if (waterLevelPercentage >= 100) {
+    // High water level
+    digitalWrite(greenLED, HIGH);
+    Serial.println("Tank Water Level = HIGH");
+  } else if (waterLevelPercentage >= 50) {
+    // Mid water level
+    digitalWrite(yellowLED, HIGH);
+    Serial.println("Tank Water Level = MEDIUM");
+  } else if (waterLevelPercentage >= 20) {
+    // Low water level
+    digitalWrite(redLED, HIGH);
+    Serial.println("Tank Water Level = LOW");
+  } else {
+    // Very low water level 
+    digitalWrite(redLED, HIGH); 
+    Serial.println("Tank Water Level = VERY LOW");
+  }
+}
+
+void runSystemVoltageLoop() {
+  // Read the value from the system voltage sensor
+  int systemVoltageValue = analogRead(System_Voltage_Sensor);
+
+  // Map the reading to a voltage (10.5 - 12.7V):
+  float simulatedVoltage = map(systemVoltageValue, 0, 1023, 105, 127) / 10.0;
+
+  // Check the simulated voltage and light the appropriate LED
+  if (simulatedVoltage >= 11.4) {
+    // Battery is in good condition (>= 12.0V)
+    digitalWrite(usbPowerControlPin1, HIGH); // Turn on USB power
+    digitalWrite(batteryGreenLED, HIGH);
+    digitalWrite(batteryYellowLED, LOW);
+    digitalWrite(batteryRedLED, LOW);
+    Serial.print("Battery Voltage: ");
+    Serial.print(simulatedVoltage);
+    Serial.println("V - Good Condition");
+    Serial.println("USB POWER ON");
+  } else if (simulatedVoltage > 10.5) {
+    // Battery is in medium condition (> 10.5V and < 12.0V)
+    digitalWrite(batteryYellowLED, HIGH);
+    digitalWrite(batteryGreenLED, LOW);
+    digitalWrite(batteryRedLED, LOW);
+    Serial.print("Battery Voltage: ");
+    Serial.print(simulatedVoltage);
+    Serial.println("V - Medium Condition");
+  } else {
+    // Battery is in poor condition (<= 10.5V)
+    digitalWrite(usbPowerControlPin1, LOW); // Turn off USB power
+    digitalWrite(batteryRedLED, HIGH);
+    digitalWrite(batteryGreenLED, LOW);
+    digitalWrite(batteryYellowLED, LOW);
+    Serial.print("Battery Voltage: ");
+    Serial.print(simulatedVoltage);
+    Serial.println("V - Poor Condition");
+    Serial.println("USB POWER OFF");
+  }
+}
+
+void runWaterQualityLoop() {
+  int sensorValue = analogRead(Water_Quality_Sensor);
+
+  // Define the thresholds for the water quality ranges
+  int thresholds[5] = {204, 409, 614, 819, 1023};
+
+  // Light up the corresponding LEDs based on water quality
+  if (sensorValue < thresholds[0]) {
+    digitalWrite(qualityRedLED, HIGH);
+    Serial.println("Water Quality: Bad");
+  } else if (sensorValue < thresholds[1]) {
+    digitalWrite(qualityYellowLED3, HIGH);
+    digitalWrite(qualityRedLED, HIGH);
+    Serial.println("Water Quality: Poor");
+  } else if (sensorValue < thresholds[2]) {
+    digitalWrite(qualityYellowLED2, HIGH);
+    digitalWrite(qualityYellowLED3, HIGH);
+    digitalWrite(qualityRedLED, HIGH);
+    Serial.println("Water Quality: Fair");
+  } else if (sensorValue < thresholds[3]) {
+    digitalWrite(qualityYellowLED1, HIGH);
+    digitalWrite(qualityYellowLED2, HIGH);
+    digitalWrite(qualityYellowLED3, HIGH);
+    Serial.println("Water Quality: Good");
+  } else {
+    digitalWrite(qualityGreenLED, HIGH);
+    digitalWrite(qualityYellowLED1, HIGH);
+    digitalWrite(qualityYellowLED2, HIGH);
+    digitalWrite(qualityYellowLED3, HIGH);
+    Serial.println("Water Quality: Excellent");
+  }
+}  
+
+void turnOffAllLeds() {
+  digitalWrite(greenLED, LOW);
+  digitalWrite(yellowLED, LOW);
+  digitalWrite(redLED, LOW);
+  digitalWrite(qualityGreenLED, LOW);
+  digitalWrite(qualityYellowLED1, LOW);
+  digitalWrite(qualityYellowLED2, LOW);
+  digitalWrite(qualityYellowLED3, LOW);
+  digitalWrite(qualityRedLED, LOW);
+  digitalWrite(batteryGreenLED, LOW);
+  digitalWrite(batteryYellowLED, LOW);
+  digitalWrite(batteryRedLED, LOW);
+}
+
+void turnOnAllLeds() {
+  digitalWrite(greenLED, HIGH);
+  digitalWrite(yellowLED, HIGH);
+  digitalWrite(redLED, HIGH);
+  digitalWrite(qualityGreenLED, HIGH);
+  digitalWrite(qualityYellowLED1, HIGH);
+  digitalWrite(qualityYellowLED2, HIGH);
+  digitalWrite(qualityYellowLED3, HIGH);
+  digitalWrite(qualityRedLED, HIGH);
+  digitalWrite(batteryGreenLED, HIGH);
+  digitalWrite(batteryYellowLED, HIGH);
+  digitalWrite(batteryRedLED, HIGH);
+}
+
+// Function to write an entry to the EEPROM at a specific index
+void writeEntry(int index, int waterLevel, int systemVoltage, int waterQuality) {
+  int address = eepromStartAddress + (index % maxEntries) * entrySize;
+  EEPROMWriteInt(address, waterLevel);
+  EEPROMWriteInt(address + 2, systemVoltage);
+  EEPROMWriteInt(address + 4, waterQuality);
+}
+
+// Function to read an entry from the EEPROM at a specific index
+void readEntry(int index, int &waterLevel, int &systemVoltage, int &waterQuality) {
+  int address = eepromStartAddress + (index % maxEntries) * entrySize;
+  waterLevel = EEPROMReadInt(address);
+  systemVoltage = EEPROMReadInt(address + 2);
+  waterQuality = EEPROMReadInt(address + 4);
+}
+
+// Function to send all entries over serial
+void sendEEPROMData() {
+  // Turn on all LEDs
+  turnOnAllLeds();
+
+  Serial.println("BEGIN_OF_EEPROM_DATA");
+  Serial.println("System 007"); //Unique system number for data collection
+  for (int i = 0; i < maxEntries; i++) {
+    int waterLevel, systemVoltage, waterQuality;
+    readEntry(i, waterLevel, systemVoltage, waterQuality);
+    Serial.print(waterLevel);
+    Serial.print(",");
+    Serial.print(systemVoltage);
+    Serial.print(",");
+    Serial.println(waterQuality);
+  }
+  Serial.println("END_OF_EEPROM_DATA");
+
+  // Turn off all LEDs
+  turnOffAllLeds();
+}
+
+// Function to clear the EEPROM
+void clearEEPROM() {
+  for (int i = eepromStartAddress; i < bufferSize; i++) {
+    EEPROM.write(i, 0);
+  }
+}
+
+// Function to write a two-byte integer to EEPROM
+void EEPROMWriteInt(int address, int value) {
+  byte two = (value & 0xFF);
+  byte one = ((value >> 8) & 0xFF);
+
+  // Write the two bytes into the EEPROM at the specified address
+  EEPROM.update(address, two);
+  EEPROM.update(address + 1, one);
+}
+
+// Function to read a two-byte integer from EEPROM
+int EEPROMReadInt(int address) {
+  // Read the two bytes from the EEPROM at the specified address
+  byte two = EEPROM.read(address);
+  byte one = EEPROM.read(address + 1);
+
+  // Combine the two bytes to form an integer
+  return (one << 8) + two;
+}
