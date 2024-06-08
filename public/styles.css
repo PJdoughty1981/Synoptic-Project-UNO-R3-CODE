@@ -1,0 +1,753 @@
+/*--------------------------------------------------------------------------------------------------------------------*/
+/*---------- General rules all screens -------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------*/
+
+/*Universal page settings denoted by "*" */
+*{                            
+    margin: 0; padding: 0; 
+}
+
+/* header styles full screen */
+header{       
+    margin-top: 4px;
+    margin-left: 4px;
+}
+/*------- header Logo styling ------------*/
+#imgLogo{
+    visibility: visible;
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    width: 600px;
+    height: 100px;
+}
+
+/* HTML page color */
+html, body {                        
+    background-color: none;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Body text color, line height and font sizes */
+body {                            
+    background-color: #D6E7DF;
+    color: #272D2D;
+    font-family: Baloo,Verdana,Arial,Helvetica,sans-serif,;
+    font: size 16px;
+    line-height: 1.5;
+    position: relative;
+    
+}
+
+/* Unordered List styling */
+ul {
+    list-style-type: disc;   
+}
+
+/* nav link styling and click effects */
+a {                        
+    text-decoration: none;
+    font: bold large Arial, Helvetica, sans-serif;
+}
+a:visited {
+    color: #070707;                 /* stock nav color */
+}
+a:link {
+    color: #2d40af;         /*clicked nav link */ 
+}
+a:hover {
+    color: rgb(12, 150, 230);                 /* mouse over nav link */
+}
+.active{
+    background-color: #f6fafa;      /* active nav link */
+    border-radius: 50px;
+}
+
+ /* nav section styling */
+nav {                    
+    text-align: right;
+    height: 100px;
+    padding: 8px;
+    font-family: Baloo;
+    margin-right: 10px;
+}
+
+/* nav section orientation as a class note the .nav and  */
+/* corressponding <li class="nav" ><a href="index.html">Home</a></li> in HTML */
+.nav {                     
+    display: inline-block; 
+    padding: 24px;
+}
+
+main {
+    margin-top: 5px; 
+    margin-bottom: 5px;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding: 16px;
+    height: auto;
+}
+
+section {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 0px;
+    padding-right: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: none;
+    height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+section > p {
+    text-align: center;
+}
+
+/* footer section styling  */
+footer {                            
+    background-color: #0d1273;
+    font-size: 0.9em;
+    text-align: center;
+    color: #D6E7DF;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    margin-top: auto;
+    height: 40px;
+    width: 100%;
+   
+    
+}
+footer:link {
+    color: #fff9e8;
+}
+footer:hover {
+    color: #62c5ef;
+}
+
+
+/* hamburger no display full screen */
+#hamburger{                 
+    display: none;
+}
+
+#post-response{
+    color: #B8195A;
+}
+#form-response{
+    color:#B8195A;
+    font-size: medium;
+    font-family: sans-serif;
+    font-style: normal;
+    font-weight: bolder;
+    text-align: center;
+    text-wrap: wrap;
+    background-color: #CFBECE;
+}
+#inHeader {
+    text-align: center;
+    font-size: 40px;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    background-color: #130674;
+    opacity: 0.8;
+    color: white;
+    text-shadow: 2px 2px 5px grey;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+#inP1 {
+    margin: 8px 35px;
+    text-align: center;
+    font-size: 18px;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    background-color: white;
+    opacity: 0.7;
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: black;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+#goalImg{
+    background-color: rgb(255, 255, 255,0.7);
+    padding: 10px;
+    border-radius: 10px;
+    margin-left: 20px;
+    margin: auto;
+    
+   
+    
+}
+#inH2 {
+    float: right;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    background-color: white;
+    opacity: 0.7;
+    padding: 7px 10px;
+    border-radius: 10px;
+    color: black;
+    overflow: hidden;
+    margin: 0px 60px;
+    text-align: center;
+}
+#inP2 {
+    margin: 12px 35px;
+    margin-bottom: 50px;
+    text-align: center;
+    font-size: 18px;
+    font-family: Verdana,Arial,Helvetica,sans-serif;
+    background-color: white;
+    opacity: 0.7;
+    padding: 10px 15px;
+    border-radius: 10px;
+    color: black;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+#submitBtn {
+    width: auto;
+    padding: 10px;
+    /* Optional: min-width: 100px; */
+}
+
+/*--------------------------------------------------------------------------------------------------------------------*/
+/*---------- Standard laptop screen size------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------------------------*/
+/*------- Team page/Goals page Text popup large screen ------------*/
+#text {
+    position: absolute;
+    color: rgb(255, 255, 255);
+    left: 26rem;
+    top: 5rem;
+    background-color: rgb(41, 41, 41, 0.8);
+    padding: 0 1rem;
+}
+#text1 {
+    position: absolute;
+    color: rgb(255, 255, 255);
+    left: 11rem;
+    top: 5rem;
+    background-color: rgb(41, 41, 41, 0.8);
+    padding: 0 1rem;
+}
+/*--------- Goal images standard screen --------------*/
+#imgGB{
+    width: 1200px;
+    height: 600px;
+    visibility: hidden;
+    position: absolute;
+    position: fixed;
+    pointer-events: none;
+    top: 120px;
+    left: 20px;
+}
+#imgHB{
+    width: 1200px;
+    height: 600px;
+    visibility: hidden;
+    position: fixed;
+    pointer-events: none;
+    top: 120px;
+    left: 20px;
+
+}
+#imgEB{
+    width: 1200px;
+    height: 600px;
+    visibility: hidden;
+    position: absolute;
+    position: fixed;
+    pointer-events: none;
+    top: 120px;
+    left: 20px;
+}
+#imgCB{
+    width: 1200px;
+    height: 600px;
+    visibility: hidden;
+    position: absolute;
+    position: fixed;
+    pointer-events: none;
+    top: 120px;
+    left: 20px;
+}
+/*--------- Goal images links standard screen --------------*/
+#imgHWLink{
+    left: 900px;
+    top: 600px;
+    width: 120px;
+    height: 50px;
+}
+#imgHWLink1{
+    left: 700px;
+    top: 600px;
+    width: 140px;
+    height: 50px;
+}
+#imgQELink{
+    left: 900px;
+    top: 620px;
+    width: 120px;
+    height: 50px;
+}
+#imgQELink1{
+    left: 770px;
+    top: 590px;
+    width: 70px;
+    height: 100px;
+}
+#imgCCLink{
+    left: 900px;
+    top: 600px;
+    width: 120px;
+    height: 50px;
+}
+#imgHWLink:hover{
+    filter: sepia(100%);
+}
+#imgHWLink1:hover{
+    filter: sepia(100%);
+}
+#imgQELink:hover{
+    filter: sepia(100%);
+}
+#imgQELink1:hover{
+    filter: sepia(100%);
+}
+#imgCCLink:hover{
+    filter: sepia(100%);
+}
+
+/* CSS Rules for Join Us Page */
+#joinusForm {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2px;
+    margin-bottom: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+    background-color: #318fed;
+    border: 10px solid #2816cc;
+    border-radius: 5px;
+    align-self: center;
+    bottom: 30px;
+}
+
+input {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid #362a52;
+    border-radius: 5px;
+    background-color: white;
+}
+
+input:hover {
+    background-color: #D6E7DF;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    height: 80px;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    border: 1px solid #312a52;
+    border-radius: 5px;
+    background-color: white;
+    resize: none;
+}
+
+textarea:hover {
+    background-color: #D6E7DF;
+}
+
+#submit {
+    margin-top: 2%;
+    margin-bottom: 2%;
+    margin-left: auto;
+    margin-right: auto; 
+    min-width: 150px;
+    padding: 5px;
+    border: 1px solid rgb(52, 21, 208);
+    border-radius: 5px;
+    background-color: #272D2D;
+    font-size: medium;
+    color: #D6E7DF;
+    cursor: pointer;
+}
+
+#submit:hover {
+    background-color: #272D2D;
+    color: rgb(52, 230, 12);  
+}
+
+#formHeader {
+    text-align: center;
+    font-size: x-large;
+    top: 20px;
+    font-family: sans-serif;
+    
+    
+}
+
+#formText {
+    text-align: center;
+    font-size: medium;
+    margin-bottom: 10px;
+    margin-left: 2px;
+    font-family: sans-serif;
+}
+
+#form-response{
+    background-color: #9a96be;
+    color: black;
+    margin-top: 10px;
+    width: 50%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    padding: auto;
+   
+}
+#label{
+    margin-left: 2px; 
+    font-weight: bold;
+    font-family: sans-serif; 
+}
+
+
+
+/*---------------------------------------------------------------------------------------------------------------------*/
+/*--------- smaller screen options ------------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------------------------------*/
+
+
+@media only screen and (max-width: 1180px) {
+    .mainNav{
+        height: 0;
+        overflow: hidden;
+    }
+
+    .showNav{
+        height: auto;
+        width: auto;
+        background-color: #478575;
+        text-align: center;
+        right: 0px;
+        
+    }
+    
+    header {
+        height: 55px;
+    }
+    footer{
+        position: absolute; 
+        top: 1250px; 
+    }
+
+    #hamburger {
+        background-color: #4d4785;
+        display: block;
+        float: right;
+        padding: 10px;       
+        height: 50%; 
+        position: sticky;    
+    }
+    
+    #wrapper {
+        position: relative;
+    }
+
+    #mainNav {
+        position: absolute;
+        z-index: 1; 
+        right: 2px; 
+        top: 45px;
+    }
+
+    .nav {
+        display: block;
+        padding: 10px;
+        width: 70%;
+        font-size: small;
+    }
+    section {
+        flex-direction: column;
+    }
+    .service {
+        width: 95%;
+    }
+
+    #goalImg {
+        width: 400px;
+        height: 200px;
+    }
+    
+    /*------ Small screen options for Goals content -----*/
+    #imgHB{
+        content:url(".png");
+        width: 460px;
+        height: 1000px;
+        position: absolute; 
+        pointer-events: none;
+        top: 130px; 
+        left: 10px;               
+    }
+    #imgEB{
+        content:url(".png");
+        width: 460px;
+        height: 1000px;
+        position: absolute; 
+        pointer-events: none;
+        top: 130px; 
+        left: 10px;               
+    }
+    #imgCB{  
+        content:url(".png");
+        width: 460px;
+        height: 1000px;
+        position: absolute; 
+        pointer-events: none;
+        top: 130px; 
+        left: 10px;               
+    }   
+    /*------- Team page/Goals page Text popup small screen ------------*/
+    #text {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        left: 8rem;
+        top: 6.7rem;
+        background-color: rgb(41, 41, 41, 0.8);
+        padding: 0 1rem;
+    }
+    #text1 {
+        position: absolute;
+        color: rgb(255, 255, 255);
+        left: 11rem;
+        top: 3.5rem;
+        background-color: rgb(41, 41, 41, 0.8);
+        padding: 0 1rem;
+    }
+    /*--------- Goal images links small screen --------------*/
+    #imgHWLink{
+        left: 300px;
+        top: 1000px;  
+    }
+    #imgHWLink1{
+        left: 150px;
+        top: 1000px;
+    }
+    #imgQELink{
+        left: 200px;
+        top: 1050px;
+    }
+    #imgQELink1{
+        left: 350px;
+        top: 1000px;
+    }
+    #imgCCLink{
+        left: 200px;
+        top: 1000px;
+    }
+    
+
+/*------ Small screen options for Join Us content -----*/
+    #joinusForm {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 2px;
+        margin-bottom: 2px;
+        margin-left: 2px;
+        margin-right: 2px;
+        width: auto;
+        background-color: #96BEB4;
+        border: 10px solid #2A5152;
+        border-radius: 5px;
+        align-self: center;
+    }
+}
+/*---------------------------------------------------------------------------------------------------------------------*/
+/*--------- Larger Lab screen options ---------------------------------------------------------------------------------*/
+/*---------------------------------------------------------------------------------------------------------------------*/
+@media only screen and (min-width: 2500px) {
+        
+    #imgGB{
+        width: 2200px;
+        height: 1000px;
+        visibility: hidden;
+        position: absolute;
+        position: fixed;
+        pointer-events: none;
+        top: 160px;
+        left: 20px;
+    }
+    #imgHB{
+        width: 2200px;
+        height: 1000px;
+        visibility: hidden;
+        position: fixed;
+        pointer-events: none;
+        top: 160px;
+        left: 20px;
+    
+    }
+    #imgEB{
+        width: 2200px;
+        height: 1000px;
+        visibility: hidden;
+        position: absolute;
+        position: fixed;
+        pointer-events: none;
+        top: 160px;
+        left: 20px;
+    }
+    #imgCB{
+        width: 2200px;
+        height: 1000px;
+        visibility: hidden;
+        position: absolute;
+        position: fixed;
+        pointer-events: none;
+        top: 160px;
+        left: 20px;
+    }
+    
+    #imgPT{
+        width: 2000px;
+        height: 853px;
+        padding: 0px;
+        visibility: hidden;
+        position: fixed;
+        pointer-events: none;
+        Top: 270px;
+        left: 190px;
+    
+    }
+    
+    #imgNT{
+        width: 2000px;
+        height: 853px;
+        padding: 0px;
+        visibility: hidden;
+        position: fixed;
+        pointer-events: none;
+        top: 270px;
+        left: 190px;
+    }
+    
+    #imgLT{
+        width: 2000px;
+        height: 853px;
+        padding: 0px;
+        visibility: hidden;
+        position: fixed;
+        pointer-events: none;
+        top: 270px;
+        left: 190px;
+    }
+
+    #imgMP{
+        visibility: hidden;
+        width: 150px;
+        height: 163px;
+        position: fixed;
+        top: 550px;
+        left: 1875px;
+    }
+
+    #imgMN{
+        visibility: hidden;
+        width: 150px;
+        height: 163px;
+        position: fixed;
+        top: 550px;
+        left: 1875px;
+    }
+
+    #imgML{
+        visibility: hidden;
+        width: 150px;
+        height: 163px;
+        position: fixed;
+        top: 550px;
+        left: 1875px;
+    }
+
+    #goalImg {
+        width: 1800px;
+        height: 750px;
+    }
+
+    nav {                    
+        text-align: center;
+        height: 100px;
+        padding: 8px;
+        font-family: Baloo;
+        margin-right: 10px;
+    }
+    /*--------- Goal images links standard screen --------------*/
+    #imgHWLink{
+        left: 1200px;
+        top: 950px;
+        width: 220px;
+        height: 100px;
+    }
+    #imgHWLink1{
+        left: 1600px;
+        top: 950px;
+        width: 240px;
+        height: 100px;
+    }
+    #imgQELink{
+        left: 1200px;
+        top: 980px;
+        width: 220px;
+        height: 100px;
+    }
+    #imgQELink1{
+        left: 1600px;
+        top: 950px;
+        width: 140px;
+        height: 150px;
+    }
+    #imgCCLink{
+        left: 1200px;
+        top: 950px;
+        width: 220px;
+        height: 100px;
+    }
+    /* ------  Signup Form text options large screen ------ */
+    #label{
+        margin-left: 2px;
+        font-weight: bold;
+        font-family: sans-serif;
+    }
+    #formHeader {
+        text-align: center;
+        font-size: x-large;
+        margin-top: 100px;
+        font-family: sans-serif;
+    }
+    
+    #formText {
+        text-align: center;
+        font-size: medium;
+        margin-bottom: 10px;
+        margin-left: 2px;
+        font-family: sans-serif;
+    }
+}

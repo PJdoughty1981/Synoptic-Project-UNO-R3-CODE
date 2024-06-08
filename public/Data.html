@@ -1,0 +1,208 @@
+<!DOCTYPE html>                                                                        <!-- Document type -->
+<html lang="en">                                                                       <!-- language type -->
+
+<!-- head -->
+<head>
+    <link rel="shortcut icon" href="#">                                                                                    
+    <meta charset="utf-8">
+    <!-- setting the viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">               
+     <!-- browser title -->
+    <title>EEPROM Data Charts</title>                                                   
+    <!-- main CSS style sheet -->
+    <link rel="stylesheet" href="styles.css">                                             
+    <!-- hosted icon content -->
+    <script src="https://kit.fontawesome.com/8f9510ec94.js" crossorigin="anonymous"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>  <!-- API used for charts --> 
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2/dist/chartjs-plugin-datalabels.min.js"></script>
+    <!-- .js scripts -->
+    <script src="dom.js" defer></script>
+    <script src="hamburger.js" defer></script> 
+    <script src="Data.js" defer></script>                                               
+    <!-- end of .js scripts -->
+    <style>
+        /* CSS to position the canvases side by side */
+        #chartCanvas, #mapCanvas {
+            display: inline-block;
+            vertical-align: top;
+        }
+    </style>
+</head>
+
+<body>                                                                <!-- Main body  -->
+    <div id="wrapper">                                                 <!-- divider with id for css -->
+    <header>                                                            <!-- main header including hamberger and title -->
+        
+            <a id="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </a>
+    </header>
+    </div>
+    
+    <nav id="mainNav">                                                <!-- main navigation links in unordered list -->
+        <ul class = "mainNav">
+            <li class="nav" ><a href="index.html">Home</a></li>
+            <li class="nav active" ><a href="Data.html">Data</a></li>
+            <li class="nav" ><a href="Goals.html">Goals</a></li>
+            <li class="nav" ><a href="Team.html">The Team</a></li>
+            <li class="nav" ><a href="JoinUs.html">Join Us</a></li>
+        </ul>
+    </nav>
+    <div id="text"></div>         <!-- popup text boxes -->
+    <main id="main"></main>
+    
+    <input type="file" id="fileInput" style="width: 50%;" />
+    <!-- Submit and save buttons for the charts -->
+    <button id="submitBtn">Submit File</button>
+    <button id="saveChart">Save Chart</button>
+    <!-- Wrap the two divs in a parent div with a flexbox layout -->
+    <div style="display: flex; justify-content: space-between;">
+        <div style="width: 50%;">
+            <!-- Set a fixed height and width for the chart canvas -->
+            <canvas id="chartCanvas" style="background-color: white; height: 200px; width: 400px; display: none;"></canvas>
+        </div>
+        <div style="width: 50%;">
+            <!-- Set the same fixed height and width for the map canvas -->
+            <canvas id="mapCanvas" style="background-color: white; height: 350px; width: 600px; display: none;"></canvas>
+        </div>
+    </div>
+    <script>
+        document.getElementById('submitBtn').addEventListener('click', function() { //Event listener with catch to start the chart proccess
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length === 0) {
+                alert('Please select a file first!');
+                return;
+            }    
+            const file = fileInput.files[0];
+            const reader = new FileReader();  // File reader to read through the submitted text file
+            
+            reader.onload = function(e) {
+                const content = e.target.result;
+                const lines = content.split('\n');
+                const chartLabels = [];
+                const waterLevelData = [];
+                const waterQualityData = [];
+                const systemVoltageData = [];
+                
+                lines.forEach((line, index) => {
+                    if (line.trim() !== '0,0,0' && line.trim() !== 'BEGIN_OF_EEPROM_DATA') {  //trim empty lines & 0,0,0
+                        const [waterLevel, voltage, waterQuality] = line.split(',');
+                        chartLabels.push(`Test ${index}`);
+                        waterLevelData.push(parseInt(waterLevel));
+                        waterQualityData.push(parseInt(waterQuality));
+                        systemVoltageData.push(parseInt(voltage) / 100); // Convert back to float volts 12.0v etc
+                    }
+                });
+    
+                // Show the canvases
+                document.getElementById('chartCanvas').style.display = 'block';
+                document.getElementById('mapCanvas').style.display = 'block';  
+                
+                const ctx = document.getElementById('chartCanvas').getContext('2d');   //Setup the 2d water quality chart
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: chartLabels,
+                        datasets: [{
+                            label: 'Water Level',
+                            data: waterLevelData,
+                            backgroundColor: 'blue'
+                        }, {
+                            label: 'Water Quality',
+                            data: waterQualityData,
+                            backgroundColor: 'green'
+                        }, {
+                            label: 'System Voltage',
+                            data: systemVoltageData,
+                            backgroundColor: 'red'
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+
+    
+            // After creating the chart, load the map image
+            const img = new Image();
+            img.onload = function() {
+                // Draw the overlay onto the map canvas
+                const mapCtx = document.getElementById('mapCanvas').getContext('2d');
+                const scale = mapCtx.canvas.width / img.width;
+                const scaledHeight = img.height * scale;
+                mapCtx.drawImage(img, 0, 0, mapCtx.canvas.width, scaledHeight);
+
+                // Now loop through the data and draw colored spots on the map
+                waterQualityData.forEach((quality, index) => {
+                    mapCtx.beginPath();
+                    // Set the x and y coordinates for each system number in use
+                    // Here I would add an arry list of all the systems and thier map coordinates for the reader to match to.
+                    const x = 160; // right from left side of map image
+                    const y = mapCtx.canvas.height - 60; // up from bottom of map image
+                    mapCtx.arc(x, y, 4, 0, 2 * Math.PI, false);
+                    // Calculate the mode of the water quality data
+                    const mode = getMode(waterQualityData);
+                    if (mode >= 4) {
+                        mapCtx.fillStyle = 'green';
+                    } else if (mode >= 2) {
+                        mapCtx.fillStyle = 'yellow';
+                    } else {
+                        mapCtx.fillStyle = 'red';
+                    }
+                    mapCtx.fill();
+
+                    // Draw the system number above the circle
+                    mapCtx.font = '8px Arial'; // Set the font to bold and the size to 12px
+                    mapCtx.textAlign = 'center'; // Center the text horizontally
+                    mapCtx.fillStyle = 'yellow'; // Set the text color to black
+                    mapCtx.fillText('7', x, y - 8); // Adjust the y value to position the text above the circle
+                });
+            };
+            img.src = 'https://i.ibb.co/pbH4d7H/Screenshot-2024-06-04-033658.png';
+        }; // This is where the reader function should end
+
+        reader.readAsText(file);
+    });
+
+    // Function to calculate the mode of an array for my map data indicator  
+    // mode will calculate adverage quality for the session.
+    function getMode(array) {
+        const frequencyMap = {};
+        let maxFreq = 0;
+        let mode;
+
+        for(const num of array) {
+            frequencyMap[num] = (frequencyMap[num] || 0) + 1;
+
+            if(frequencyMap[num] > maxFreq) {
+                maxFreq = frequencyMap[num];
+                mode = num;
+            }
+        }
+
+        return mode;
+    }
+</script>
+<script>
+    // Add event listeners for the save button
+    document.getElementById('saveChart').addEventListener('click', function() {
+        saveCanvasAsImageFile('chartCanvas', 'chart System 007.png');  // This would be replaced with the system array variable 
+    });    
+    // Function to save a canvas as an image file
+    function saveCanvasAsImageFile(canvasId, fileName) {
+        const canvas = document.getElementById(canvasId);
+        const dataUrl = canvas.toDataURL('image/png');
+        const a = document.createElement('a');
+        a.href = dataUrl;
+        a.download = fileName;
+        a.click();
+    }
+</script>
+<footer id="footer"></footer>                                                                                    <!-- footer and mail links -->
+</body>
+</html>                                                                                         <!-- END OF CODE -->

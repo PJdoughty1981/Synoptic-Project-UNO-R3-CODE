@@ -1,0 +1,90 @@
+<!DOCTYPE html>                                                                        <!-- Document type -->
+<html lang="en">                                                                       <!-- language type -->
+
+<!-- head -->
+<head>
+    <link rel="shortcut icon" href="#">                                                                                    
+    <meta charset="utf-8">
+    <!-- setting the viewport -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">               
+     <!-- browser title -->
+    <title>AquaSol System Goals </title>                                                   
+    <!-- main CSS style sheet -->
+    <link rel="stylesheet" href="styles.css">                                             
+    <!-- hosted icon content -->
+    <script src="https://kit.fontawesome.com/8f9510ec94.js" crossorigin="anonymous"></script> 
+    <!-- .js scripts -->
+    <script src="dom.js" defer></script>
+    <script src="hamburger.js" defer></script> 
+    <script src="Goals.js" defer></script>                                               
+    <!-- end of .js scripts -->
+</head>
+
+<body>                                                                <!-- Main body  -->
+    <div id="wrapper">                                                 <!-- divider with id for css -->
+    <header>                                                            <!-- main header including hamberger and title -->
+        
+            <a id="hamburger">
+                <i class="fa-solid fa-bars"></i>
+            </a>
+    </header>
+    </div>
+    <div id="imgContainer" style="display: flex; position: fixed; top: 0;"></div>
+
+    <script>
+        // Goals icons
+        const imgH = document.createElement("img");
+        imgH.src = "https://i.ibb.co/NmXLXN7/climate-Change.png";
+        imgH.id ="imgH";
+        imgH.style.width = '100px'; // Set the width to 100px
+        imgH.style.height = '100px';
+        imgH.onmouseover = function displayText() {
+            document.getElementById("text").textContent = "Click for: Clean & Affordable Energy ";
+        }
+        imgH.onmouseout = function hideText(){
+            document.getElementById("text").textContent = "";
+        }
+        document.getElementById('imgContainer').appendChild(imgH);
+        
+        const imgE = document.createElement("img");
+        imgE.src = "https://i.ibb.co/QKxmNg9/good-Heath.png";
+        imgE.id ="imgE";
+        imgE.style.width = '100px'; // Set the width to 100px
+        imgE.style.height = '100px';
+        imgE.onmouseover = function displayText1() {
+            document.getElementById("text").textContent = "Click for: Clean water & Sanitation";
+        }
+        imgE.onmouseout = function hideText1(){
+            document.getElementById("text").textContent = "";
+        }
+        document.getElementById('imgContainer').appendChild(imgE);
+    
+        const imgC = document.createElement("img");
+        imgC.src = "https://i.ibb.co/stffTWr/education.png";
+        imgC.id ="imgC";
+        imgC.style.width = '100px'; // Set the width to 100px
+        imgC.style.height = '100px';
+        imgC.onmouseover = function displayText2() {
+            document.getElementById("text").textContent = "Click for: Good Health & Wellbeing";
+        }
+        imgC.onmouseout = function hideText2(){
+            document.getElementById("text").textContent = "";
+        }
+        document.getElementById('imgContainer').appendChild(imgC);
+    </script>
+    
+    <nav id="mainNav">                                                <!-- main navigation links in unordered list -->
+        <ul class = "mainNav">
+            <li class="nav" ><a href="index.html">Home</a></li>
+            <li class="nav" ><a href="Data.html">Data</a></li>
+            <li class="nav active" ><a href="Goals.html">Goals</a></li>
+            <li class="nav" ><a href="Team.html">The Team</a></li>
+            <li class="nav" ><a href="JoinUs.html">Join Us</a></li>
+        </ul>
+    </nav>
+    <div id="text"></div>         <!-- popup text boxes -->
+<main id="main"></main>                                                                 <!-- main content in text and titles and paragraphs -->
+<footer id="footer"></footer>                                                                                    <!-- footer and mail links -->
+</body>
+
+</html>                                                                                         <!-- END OF CODE -->
