@@ -1,0 +1,131 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\peter> C:/Users/peter/AppData/Local/Programs/Python/Python312/python.exe -m pip install pyinstaller
+Requirement already satisfied: pyinstaller in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (6.7.0)
+Requirement already satisfied: setuptools>=42.0.0 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (70.0.0)
+Requirement already satisfied: altgraph in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (0.17.4)
+Requirement already satisfied: pyinstaller-hooks-contrib>=2024.6 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (2024.6)
+Requirement already satisfied: packaging>=22.0 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (24.0)
+Requirement already satisfied: pefile>=2022.5.30 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (2023.2.7)
+Requirement already satisfied: pywin32-ctypes>=0.2.1 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (0.2.2)
+PS C:\Users\peter> cd desktop
+PS C:\Users\peter\desktop> cd waterdata
+PS C:\Users\peter\desktop\waterdata> cd waterdata
+PS C:\Users\peter\desktop\waterdata\waterdata> cd waterdatapython
+PS C:\Users\peter\desktop\waterdata\waterdata\waterdatapython> C:/Users/peter/AppData/Local/Programs/Python/Python312/python.exe -m pyinstaller --onefile water_data_script.py
+C:\Users\peter\AppData\Local\Programs\Python\Python312\python.exe: No module named pyinstaller
+PS C:\Users\peter\desktop\waterdata\waterdata\waterdatapython> C:/Users/peter/AppData/Local/Programs/Python/Python312/python.exe --version
+Python 3.12.0
+PS C:\Users\peter\desktop\waterdata\waterdata\waterdatapython> C:/Users/peter/AppData/Local/Programs/Python/Python312/python.exe -m pip install pyinstaller
+Requirement already satisfied: pyinstaller in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (6.7.0)
+Requirement already satisfied: setuptools>=42.0.0 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (70.0.0)
+Requirement already satisfied: altgraph in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (0.17.4)
+Requirement already satisfied: pyinstaller-hooks-contrib>=2024.6 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (2024.6)
+Requirement already satisfied: packaging>=22.0 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (24.0)
+Requirement already satisfied: pefile>=2022.5.30 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (2023.2.7)
+Requirement already satisfied: pywin32-ctypes>=0.2.1 in c:\users\peter\appdata\local\programs\python\python312\lib\site-packages (from pyinstaller) (0.2.2)
+PS C:\Users\peter\desktop\waterdata\waterdata\waterdatapython> C:/Users/peter/AppData/Local/Programs/Python/Python312/Scripts/pyinstaller.exe --onefile water_data_script.py
+655 INFO: PyInstaller: 6.7.0, contrib hooks: 2024.6
+655 INFO: Python: 3.12.0
+701 INFO: Platform: Windows-11-10.0.22631-SP0
+701 INFO: wrote C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\water_data_script.spec
+717 INFO: Extending PYTHONPATH with paths
+['C:\\Users\\peter\\desktop\\waterdata\\waterdata\\waterdatapython']
+2002 INFO: checking Analysis
+2002 INFO: Building Analysis because Analysis-00.toc is non existent
+2003 INFO: Running Analysis Analysis-00.toc
+2003 INFO: Target bytecode optimization level: 0
+2003 INFO: Initializing module dependency graph...
+2017 INFO: Caching module graph hooks...
+2054 INFO: Analyzing base_library.zip ...
+4125 INFO: Loading module hook 'hook-encodings.py' from 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks'...
+6791 INFO: Loading module hook 'hook-pickle.py' from 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks'...
+8704 INFO: Loading module hook 'hook-heapq.py' from 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks'...
+10556 INFO: Caching module dependency graph...
+10697 INFO: Looking for Python shared library...
+10712 INFO: Using Python shared library: C:\Users\peter\AppData\Local\Programs\Python\Python312\python312.dll
+10712 INFO: Analyzing C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\water_data_script.py
+10962 INFO: Processing module hooks...
+10972 INFO: Performing binary vs. data reclassification (2 entries)
+10992 INFO: Looking for ctypes DLLs
+11013 WARNING: Ignoring /System/Library/Frameworks/IOKit.framework/IOKit imported from C:\Users\peter\AppData\Local\Programs\Python\Python312\Lib\site-packages\serial\tools\list_ports_osx.py - only basenames are supported with ctypes imports!
+11014 WARNING: Ignoring /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation imported from C:\Users\peter\AppData\Local\Programs\Python\Python312\Lib\site-packages\serial\tools\list_ports_osx.py - only basenames are supported with ctypes imports!
+11025 INFO: Analyzing run-time hooks ...
+11027 INFO: Including run-time hook 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py'
+11032 INFO: Looking for dynamic libraries
+11239 INFO: Extra DLL search directories (AddDllDirectory): []
+11240 INFO: Extra DLL search directories (PATH): []
+11660 INFO: Warnings written to C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\build\water_data_script\warn-water_data_script.txt
+11687 INFO: Graph cross-reference written to C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\build\water_data_script\xref-water_data_script.html
+11720 INFO: checking PYZ
+11720 INFO: Building PYZ because PYZ-00.toc is non existent
+11720 INFO: Building PYZ (ZlibArchive) C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\build\water_data_script\PYZ-00.pyz
+12084 INFO: Building PYZ (ZlibArchive) C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\build\water_data_script\PYZ-00.pyz completed successfully.
+12128 INFO: checking PKG
+12129 INFO: Building PKG because PKG-00.toc is non existent
+12129 INFO: Building PKG (CArchive) water_data_script.pkg
+14695 INFO: Building PKG (CArchive) water_data_script.pkg completed successfully.
+14700 INFO: Bootloader C:\Users\peter\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+14702 INFO: checking EXE
+14702 INFO: Building EXE because EXE-00.toc is non existent
+14702 INFO: Building EXE from EXE-00.toc
+14703 INFO: Copying bootloader EXE to C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\dist\water_data_script.exe
+14907 INFO: Copying icon to EXE
+14996 INFO: Copying 0 resources to EXE
+14996 INFO: Embedding manifest in EXE
+15083 INFO: Appending PKG archive to EXE
+15097 INFO: Fixing EXE headers
+17985 INFO: Building EXE from EXE-00.toc completed successfully.
+PS C:\Users\peter\desktop\waterdata\waterdata\waterdatapython> C:/Users/peter/AppData/Local/Programs/Python/Python312/Scripts/pyinstaller.exe --onefile water_data_script.py
+398 INFO: PyInstaller: 6.7.0, contrib hooks: 2024.6
+398 INFO: Python: 3.12.0
+437 INFO: Platform: Windows-11-10.0.22631-SP0
+439 INFO: wrote C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\water_data_script.spec
+444 INFO: Extending PYTHONPATH with paths
+['C:\\Users\\peter\\desktop\\waterdata\\waterdata\\waterdatapython']
+916 INFO: checking Analysis
+939 INFO: Building because C:\Users\peter\Desktop\WATERDATA\WATERDATA\WATERDATAPYTHON\WATER_DATA_SCRIPT.py changed
+939 INFO: Running Analysis Analysis-00.toc
+939 INFO: Target bytecode optimization level: 0
+939 INFO: Initializing module dependency graph...
+942 INFO: Caching module graph hooks...
+959 INFO: Analyzing base_library.zip ...
+2766 INFO: Loading module hook 'hook-encodings.py' from 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks'...
+4864 INFO: Loading module hook 'hook-pickle.py' from 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks'...
+5962 INFO: Loading module hook 'hook-heapq.py' from 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks'...
+6382 INFO: Caching module dependency graph...
+6525 INFO: Looking for Python shared library...
+6534 INFO: Using Python shared library: C:\Users\peter\AppData\Local\Programs\Python\Python312\python312.dll
+6535 INFO: Analyzing C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\water_data_script.py
+6731 INFO: Processing module hooks...
+6738 INFO: Performing binary vs. data reclassification (2 entries)
+6758 INFO: Looking for ctypes DLLs
+6778 WARNING: Ignoring /System/Library/Frameworks/IOKit.framework/IOKit imported from C:\Users\peter\AppData\Local\Programs\Python\Python312\Lib\site-packages\serial\tools\list_ports_osx.py - only basenames are supported with ctypes imports!
+6778 WARNING: Ignoring /System/Library/Frameworks/CoreFoundation.framework/CoreFoundation imported from C:\Users\peter\AppData\Local\Programs\Python\Python312\Lib\site-packages\serial\tools\list_ports_osx.py - only basenames are supported with ctypes imports!
+6786 INFO: Analyzing run-time hooks ...
+6789 INFO: Including run-time hook 'C:\\Users\\peter\\AppData\\Local\\Programs\\Python\\Python312\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py'
+6795 INFO: Looking for dynamic libraries
+7025 INFO: Extra DLL search directories (AddDllDirectory): []
+7026 INFO: Extra DLL search directories (PATH): []
+7320 INFO: Warnings written to C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\build\water_data_script\warn-water_data_script.txt
+7346 INFO: Graph cross-reference written to C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\build\water_data_script\xref-water_data_script.html
+7357 INFO: checking PYZ
+7387 INFO: checking PKG
+7399 INFO: Building because toc changed
+7399 INFO: Building PKG (CArchive) water_data_script.pkg
+9828 INFO: Building PKG (CArchive) water_data_script.pkg completed successfully.
+9832 INFO: Bootloader C:\Users\peter\AppData\Local\Programs\Python\Python312\Lib\site-packages\PyInstaller\bootloader\Windows-64bit-intel\run.exe
+9832 INFO: checking EXE
+9850 INFO: Building because toc changed
+9850 INFO: Building EXE from EXE-00.toc
+9853 INFO: Copying bootloader EXE to C:\Users\peter\desktop\waterdata\waterdata\waterdatapython\dist\water_data_script.exe
+9988 INFO: Copying icon to EXE
+10070 INFO: Copying 0 resources to EXE
+10071 INFO: Embedding manifest in EXE
+10158 INFO: Appending PKG archive to EXE
+10174 INFO: Fixing EXE headers
+12975 INFO: Building EXE from EXE-00.toc completed successfully.
+PS C:\Users\peter\desktop\waterdata\waterdata\waterdatapython>
