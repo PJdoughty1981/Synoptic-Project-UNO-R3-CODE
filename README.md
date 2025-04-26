@@ -1,3 +1,4 @@
+,,,
 //DOC STRING-----------------------------------------------------------------------//
 //Arduino code for the UNO R3 Group 29  Peter Doughty : Programmer                 //
 //02/06/2024 Rev 0.3                                                               //
@@ -36,3 +37,5 @@
 //Global variables use 768 bytes (37%) of dynamic memory, leaving 1280 bytes for   //
 //local variables. Maximum is 2048 bytes.                                          //
 //---------------------------------------------------------------------------------//
+,,,
+...
